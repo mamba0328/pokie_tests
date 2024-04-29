@@ -1,7 +1,5 @@
-// @ts-ignore
 import * as POKIE from 'pokie';
-import { ZOMBIE_LAND_SLOTS } from "./consts.js";
-
+import {ZOMBIE_LAND_SLOTS} from "../consts.js";
 export class ZombielandConfigConstructor {
 
     constructor() {
@@ -12,6 +10,7 @@ export class ZombielandConfigConstructor {
         this.setReelAndRows(this._config)
         this.set5x5Paylines(this._config);
         this.setSlotSymbols(this._config);
+        this.setWildSymbol(this._config);
         this.setScatterSymbol(this._config);
         this.setPaytable(this._config);
         this.setSymbolSequence(this._config)
@@ -63,60 +62,64 @@ export class ZombielandConfigConstructor {
         config.setAvailableSymbols(Object.values(ZOMBIE_LAND_SLOTS));
     }
 
+    setWildSymbol = (config) => {
+        config.setWildSymbols([ZOMBIE_LAND_SLOTS.WILD])
+    }
+
     setScatterSymbol  = (config) => {
-        config.setScatterSymbols([ZOMBIE_LAND_SLOTS.WILD])
+        config.setScatterSymbols([ZOMBIE_LAND_SLOTS.SCATTER])
     }
 
     setPaytable = (config)=> {
         const pt = new POKIE.Paytable( config.getAvailableBets(), config.getAvailableSymbols() );
 
-        const { BRAIN, SKELETON, ZOMBIE, QUEEN, KING, ACE, JOKER, WILD, EYE, LADY_ZOMBIE, UNDEAD } = ZOMBIE_LAND_SLOTS;
+        const { BRAIN, SKELETON, ZOMBIE, QUEEN, KING, ACE, JACK, EYE, LADY_ZOMBIE, UNDEAD, SCATTER } = ZOMBIE_LAND_SLOTS;
 
         //LOW TIER
-        pt.setPayoutForSymbol(BRAIN, 3, 0.75);
+        pt.setPayoutForSymbol(BRAIN, 3, 0.4);
         pt.setPayoutForSymbol(BRAIN, 4, 1);
-        pt.setPayoutForSymbol(BRAIN, 5, 2);
+        pt.setPayoutForSymbol(BRAIN, 5, 1.5);
 
-        pt.setPayoutForSymbol(SKELETON, 3, 0.75);
+        pt.setPayoutForSymbol(SKELETON, 3, 0.4);
         pt.setPayoutForSymbol(SKELETON, 4, 1);
-        pt.setPayoutForSymbol(SKELETON, 5, 2);
+        pt.setPayoutForSymbol(SKELETON, 5, 1.5);
 
-        pt.setPayoutForSymbol(ZOMBIE, 3, 0.75);
+        pt.setPayoutForSymbol(ZOMBIE, 3, 0.4);
         pt.setPayoutForSymbol(ZOMBIE, 4, 1);
-        pt.setPayoutForSymbol(ZOMBIE, 5, 2);
+        pt.setPayoutForSymbol(ZOMBIE, 5, 1.5);
 
-        pt.setPayoutForSymbol(EYE, 3, 0.75);
+        pt.setPayoutForSymbol(EYE, 3, 0.4);
         pt.setPayoutForSymbol(EYE, 4, 1);
-        pt.setPayoutForSymbol(EYE, 5, 2);
+        pt.setPayoutForSymbol(EYE, 5, 1.5);
 
-        pt.setPayoutForSymbol(UNDEAD, 3, 0.75);
+        pt.setPayoutForSymbol(UNDEAD, 3, 0.4);
         pt.setPayoutForSymbol(UNDEAD, 4, 1);
-        pt.setPayoutForSymbol(UNDEAD, 5, 2);
+        pt.setPayoutForSymbol(UNDEAD, 5, 1.5);
 
-        // pt.setPayoutForSymbol(LADY_ZOMBIE, 3, 0.4);
-        // pt.setPayoutForSymbol(LADY_ZOMBIE, 4, 0.8);
-        // pt.setPayoutForSymbol(LADY_ZOMBIE, 5, 1.2);
+        pt.setPayoutForSymbol(LADY_ZOMBIE, 3, 0.4);
+        pt.setPayoutForSymbol(LADY_ZOMBIE, 4, 1);
+        pt.setPayoutForSymbol(LADY_ZOMBIE, 5, 1.5);
 
 
         //MIDDLE TIER
-        pt.setPayoutForSymbol(QUEEN, 3, 1.25);
-        pt.setPayoutForSymbol(QUEEN, 4, 2.5);
-        pt.setPayoutForSymbol(QUEEN, 5, 5);
+        pt.setPayoutForSymbol(JACK, 3, 1);
+        pt.setPayoutForSymbol(JACK, 4, 2);
+        pt.setPayoutForSymbol(JACK, 5, 3);
 
-        pt.setPayoutForSymbol(KING, 3, 1.5);
-        pt.setPayoutForSymbol(KING, 4, 3);
-        pt.setPayoutForSymbol(KING, 5, 6);
+        pt.setPayoutForSymbol(QUEEN, 3, 2);
+        pt.setPayoutForSymbol(QUEEN, 4, 3);
+        pt.setPayoutForSymbol(QUEEN, 5, 4);
 
-        pt.setPayoutForSymbol(ACE, 3, 2.5);
-        pt.setPayoutForSymbol(ACE, 4, 5);
-        pt.setPayoutForSymbol(ACE, 5, 10);
+        pt.setPayoutForSymbol(KING, 3, 3);
+        pt.setPayoutForSymbol(KING, 4, 4);
+        pt.setPayoutForSymbol(KING, 5, 5);
 
         //TOP TIER
-        pt.setPayoutForSymbol(JOKER, 3, 5);
-        pt.setPayoutForSymbol(JOKER, 4, 10);
-        pt.setPayoutForSymbol(JOKER, 5, 15);
+        pt.setPayoutForSymbol(ACE, 3, 5);
+        pt.setPayoutForSymbol(ACE, 4, 7);
+        pt.setPayoutForSymbol(ACE, 5, 10);
 
-        pt.setPayoutForSymbol(WILD, 5, 25);
+        pt.setPayoutForSymbol(SCATTER, 15, 100);
 
         config.setPaytable(pt);
     }
@@ -124,23 +127,32 @@ export class ZombielandConfigConstructor {
     setSymbolSequence = (config)=> {
         const symbolsNumbers = this.getNumberOfSymbols();
         const sequence = new POKIE.SymbolsSequence().fromNumbersOfSymbols(symbolsNumbers);
+        const sequences = [
+            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
+            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
+            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
+            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
+            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
+        ]
+
+        sequences[1].addSymbol("SCATTER", config.getReelsSymbolsNumber(), Math.floor(sequences[1].getSize() / 2));
+        sequences[2].addSymbol("SCATTER", config.getReelsSymbolsNumber(), Math.floor(sequences[2].getSize() / 2));
+        sequences[3].addSymbol("SCATTER", config.getReelsSymbolsNumber(), Math.floor(sequences[3].getSize() / 2));
+
+        sequences[1].addSymbol("SCATTER", config.getReelsSymbolsNumber());
+        sequences[2].addSymbol("SCATTER", config.getReelsSymbolsNumber());
+        sequences[3].addSymbol("SCATTER", config.getReelsSymbolsNumber());
 
         this.shuffleUntilNoAdjacentScatter(sequence);
 
-        config.setSymbolsSequences([
-            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
-            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
-            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
-            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
-            new POKIE.SymbolsSequence().fromArray(sequence.toArray()),
-        ]);
+        config.setSymbolsSequences(sequences);
     }
 
     getNumberOfSymbols = ()=> {
         const { BRAIN, SKELETON,  ZOMBIE,  QUEEN, KING, ACE, JOKER, WILD, EYE, LADY_ZOMBIE, UNDEAD } = ZOMBIE_LAND_SLOTS;
         return {
             [EYE]: 3,
-            // [LADY_ZOMBIE]: 3,
+            [LADY_ZOMBIE]: 3,
             [UNDEAD]: 3,
             [BRAIN]: 3,
             [SKELETON]: 3,
@@ -168,27 +180,3 @@ export class ZombielandConfigConstructor {
         }
     }
 }
-
-const config = new ZombielandConfigConstructor().config;
-
-const allReelsCombinations = 
-  POKIE.SymbolsCombinationsAnalyzer.getAllPossibleSymbolsCombinations(
-    config.getSymbolsSequences(), config.getReelsSymbolsNumber()
-    );
-  
-    const allWinsData = [];
-let totalPayout = 0;
-allReelsCombinations.forEach(combination => {
-    const wc = new POKIE.VideoSlotWinCalculator(config);
-    wc.calculateWin(config.getBet(), new POKIE.SymbolsCombination().fromMatrix(combination));
-    if (wc.getWinAmount() > 0) {
-        allWinsData.push(wc);
-        totalPayout += wc.getWinAmount();
-    }
-});
-
-
-console.log("Total winning combinations number: " + allWinsData.length);
-console.log("Total payout: " + totalPayout);
-console.log("Hit frequency: " + allWinsData.length / allReelsCombinations.length);
-console.log("RTP: " + totalPayout / allReelsCombinations.length);

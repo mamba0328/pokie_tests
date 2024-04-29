@@ -4,10 +4,11 @@ export const ZOMBIE_LAND_SLOTS = {
     SKELETON: 'S',
     UNDEAD: 'U',
     ZOMBIE: 'Z',
-    // LADY_ZOMBIE : 'L',
+    LADY_ZOMBIE : 'L',
     WILD : 'W',
     QUEEN: 'Q',
     KING : 'K',
     ACE: 'A',
     JOKER: 'J',
+    SCATTER: 'SCATTER'
 }
